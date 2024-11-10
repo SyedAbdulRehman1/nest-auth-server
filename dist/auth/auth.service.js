@@ -77,7 +77,13 @@ let AuthService = class AuthService {
         if (!isPasswordValid) {
             throw new Error('Invalid credentials');
         }
-        const payload = { email: user.email, userId: user.id, type: user.role };
+        const payload = {
+            id: user.id,
+            email: user.email,
+            userId: user.id,
+            role: user.role,
+            type: user.userType,
+        };
         const accessToken = this.jwtService.sign(payload);
         return { accessToken };
     }

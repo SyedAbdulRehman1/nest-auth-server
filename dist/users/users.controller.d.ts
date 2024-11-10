@@ -12,8 +12,8 @@ export declare class UsersController {
         message: string;
         status: string;
         user: {
-            name: string;
             id: string;
+            name: string;
             email: string;
             password: string;
             refreshToken: string;
@@ -31,8 +31,8 @@ export declare class UsersController {
         accessToken: string;
     }>;
     update(id: string, updateUserDto: UpdateUserDto): Promise<{
-        name: string;
         id: string;
+        name: string;
         email: string;
         password: string;
         refreshToken: string;
@@ -46,8 +46,8 @@ export declare class UsersController {
         updatedAt: Date;
     }>;
     getProfile(user: any): Promise<{
-        name: string;
         id: string;
+        name: string;
         email: string;
         password: string;
         refreshToken: string;

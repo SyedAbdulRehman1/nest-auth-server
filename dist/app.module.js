@@ -18,6 +18,10 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const users_module_1 = require("./users/users.module");
 const users_service_1 = require("./users/users.service");
+const courses_module_1 = require("./courses/courses.module");
+const courses_service_1 = require("./courses/courses.service");
+const serve_static_1 = require("@nestjs/serve-static");
+const path_1 = require("path");
 let AppModule = class AppModule {
     constructor(initialSetupService) {
         this.initialSetupService = initialSetupService;
@@ -28,9 +32,18 @@ let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [prisma_module_1.PrismaModule, auth_module_1.AuthModule, users_module_1.UsersModule],
+        imports: [
+            prisma_module_1.PrismaModule,
+            auth_module_1.AuthModule,
+            courses_module_1.CoursesModule,
+            users_module_1.UsersModule,
+            serve_static_1.ServeStaticModule.forRoot({
+                rootPath: (0, path_1.join)(__dirname, '..', 'uploads'),
+                serveRoot: '/uploads',
+            }),
+        ],
         controllers: [app_controller_1.AppController],
-        providers: [initial_setup_service_1.InitialSetupService, app_service_1.AppService, users_service_1.UsersService],
+        providers: [initial_setup_service_1.InitialSetupService, courses_service_1.CoursesService, app_service_1.AppService, users_service_1.UsersService],
     }),
     __metadata("design:paramtypes", [initial_setup_service_1.InitialSetupService])
 ], AppModule);

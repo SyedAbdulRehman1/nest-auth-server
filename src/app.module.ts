@@ -7,12 +7,25 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { UsersService } from './users/users.service';
+import { CoursesModule } from './courses/courses.module';
+import { CoursesService } from './courses/courses.service';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
-  imports: [PrismaModule, AuthModule, UsersModule],
+  imports: [
+    PrismaModule,
+    AuthModule,
+    CoursesModule,
+    UsersModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'), // Path to the `uploads` folder
+      serveRoot: '/uploads', // URL prefix to access the uploads (optional)
+    }),
+  ],
   controllers: [AppController],
 
-  providers: [InitialSetupService, AppService, UsersService],
+  providers: [InitialSetupService, CoursesService, AppService, UsersService],
 })
 export class AppModule implements OnModuleInit {
   constructor(private initialSetupService: InitialSetupService) {}

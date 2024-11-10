@@ -10,15 +10,15 @@ export class InitialSetupService {
   async createTeacher() {
     // Check if there’s already a teacher
     const existingTeacher = await this.prisma.user.findUnique({
-      where: { email: 'teacher@school.com' },
+      where: { email: 'test@gmail.com' },
     });
 
     if (!existingTeacher) {
       // Register a teacher if one doesn't exist
-      const hashedPassword = await bcrypt.hash('teacher_password', 10); // Default password
+      const hashedPassword = await bcrypt.hash('hello123', 10);
       await this.prisma.user.create({
         data: {
-          email: 'teacher@school.com', // Use your default teacher email
+          email: 'test@gmail.com', // Use your default teacher email
           password: hashedPassword,
           userType: 'TEACHER',
           role: 'TEACHER',

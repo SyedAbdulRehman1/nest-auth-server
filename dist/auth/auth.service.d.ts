@@ -10,10 +10,10 @@ export declare class AuthService {
         message: string;
         status: string;
         user: {
-            email: string;
-            password: string;
             id: string;
             name: string;
+            email: string;
+            password: string;
             refreshToken: string;
             userType: import(".prisma/client").$Enums.UserType;
             emailVerified: boolean;
