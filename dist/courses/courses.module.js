@@ -14,13 +14,20 @@ const auth_service_1 = require("../auth/auth.service");
 const prisma_service_1 = require("../prisma/prisma.service");
 const jwt_1 = require("@nestjs/jwt");
 const chapters_service_1 = require("./chapters/chapters.service");
+const mux_service_1 = require("./chapters/mux.service");
 let CoursesModule = class CoursesModule {
 };
 CoursesModule = __decorate([
     (0, common_1.Module)({
         imports: [jwt_1.JwtModule],
         controllers: [courses_controller_1.CoursesController],
-        providers: [courses_service_1.CoursesService, chapters_service_1.ChaptersService, prisma_service_1.PrismaService, auth_service_1.AuthService],
+        providers: [
+            courses_service_1.CoursesService,
+            chapters_service_1.ChaptersService,
+            mux_service_1.MuxService,
+            prisma_service_1.PrismaService,
+            auth_service_1.AuthService,
+        ],
     })
 ], CoursesModule);
 exports.CoursesModule = CoursesModule;

@@ -22,6 +22,10 @@ const courses_module_1 = require("./courses/courses.module");
 const courses_service_1 = require("./courses/courses.service");
 const serve_static_1 = require("@nestjs/serve-static");
 const path_1 = require("path");
+const chapters_module_1 = require("./courses/chapters/chapters.module");
+const courses_module_2 = require("./categories/courses.module");
+const purchases_module_1 = require("./purchases/purchases.module");
+const ChatModule_1 = require("./Chat/ChatModule");
 let AppModule = class AppModule {
     constructor(initialSetupService) {
         this.initialSetupService = initialSetupService;
@@ -37,6 +41,10 @@ AppModule = __decorate([
             auth_module_1.AuthModule,
             courses_module_1.CoursesModule,
             users_module_1.UsersModule,
+            chapters_module_1.ChapterModule,
+            courses_module_2.CategoryModule,
+            ChatModule_1.ChatModule,
+            purchases_module_1.PurchasesModule,
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: (0, path_1.join)(__dirname, '..', 'uploads'),
                 serveRoot: '/uploads',

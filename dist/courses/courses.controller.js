@@ -23,6 +23,7 @@ const multer_2 = require("@nestjs/platform-express/multer");
 const path_1 = require("path");
 const fs = require("fs");
 const chapters_service_1 = require("./chapters/chapters.service");
+const update_chapter_dto_1 = require("./dto/update-chapter.dto");
 let CoursesController = class CoursesController {
     constructor(coursesService, chaptersService) {
         this.coursesService = coursesService;
@@ -90,6 +91,23 @@ let CoursesController = class CoursesController {
             throw new common_1.HttpException('Failed to fetch course details', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    async getUniqueCourse(courseId, req) {
+        const userId = req.user['id'];
+        const course = await this.coursesService.getCourseById(courseId, userId);
+        return { status: 'success', data: course };
+    }
+    async getCourseDetailsWithProgress(courseId, req) {
+        var _a;
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        if (!userId) {
+            throw new common_1.HttpException('Unauthorized', common_1.HttpStatus.UNAUTHORIZED);
+        }
+        const course = await this.coursesService.getCourseWithProgress(courseId, userId);
+        if (!course) {
+            throw new common_1.HttpException('Course not found', common_1.HttpStatus.NOT_FOUND);
+        }
+        return course;
+    }
     async updateCourse(courseId, updateData, req) {
         var _a;
         const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
@@ -151,6 +169,87 @@ let CoursesController = class CoursesController {
         });
         return chapter;
     }
+    async updateChapter(courseId, chapterId, updateChapterDto, req) {
+        var _a;
+        try {
+            const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+            if (!userId) {
+                throw new common_1.HttpException('Unauthorized', common_1.HttpStatus.UNAUTHORIZED);
+            }
+            console.log(updateChapterDto, 'udddd');
+            const chapter = await this.chaptersService.updateChapter(courseId, chapterId, updateChapterDto, userId);
+            return { chapter, message: 'Chapter updated successfully' };
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    async publishChapter(courseId, chapterId, req) {
+        var _a;
+        console.log(req, 'ererer');
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        if (!userId) {
+            throw new common_1.HttpException('Unauthorized', common_1.HttpStatus.UNAUTHORIZED);
+        }
+        return this.coursesService.publishChapter(courseId, chapterId, userId);
+    }
+    async unpublishChapter(courseId, chapterId, req) {
+        var _a;
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        if (!userId) {
+            throw new common_1.HttpException('Unauthorized', common_1.HttpStatus.UNAUTHORIZED);
+        }
+        try {
+            return await this.coursesService.unpublishChapter(courseId, chapterId, userId);
+        }
+        catch (error) {
+            console.error('[CHAPTER_UNPUBLISH]', error);
+            throw new common_1.HttpException('Internal Server Error', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    async publishCourse(id, req) {
+        var _a;
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        if (!userId) {
+            throw new common_1.HttpException('Unauthorized', common_1.HttpStatus.UNAUTHORIZED);
+        }
+        try {
+            return await this.coursesService.publishCourse(id, userId);
+        }
+        catch (error) {
+            console.error('[COURSE_ID_PUBLISH]', error);
+            throw new common_1.HttpException('Internal Server Error', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    async unpublishCourse(courseId, req) {
+        var _a;
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        if (!userId) {
+            throw new common_1.HttpException('Unauthorized', common_1.HttpStatus.UNAUTHORIZED);
+        }
+        try {
+            return await this.coursesService.unpublishCourse(courseId, userId);
+        }
+        catch (error) {
+            console.error('[COURSE_ID_UNPUBLISH]', error);
+            throw new common_1.HttpException('Internal Server Error', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    async reorderChapters(courseId, list, req) {
+        var _a;
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        if (!userId) {
+            throw new common_1.HttpException('Unauthorized', common_1.HttpStatus.UNAUTHORIZED);
+        }
+        try {
+            await this.coursesService.reorderChapters(courseId, userId, list);
+            return { message: 'Chapters reordered successfully' };
+        }
+        catch (error) {
+            console.error('[REORDER]', error);
+            throw new common_1.HttpException('Internal Server Error', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 };
 __decorate([
     (0, common_1.Get)(),
@@ -176,6 +275,22 @@ __decorate([
     __metadata("design:paramtypes", [String, String, Object]),
     __metadata("design:returntype", Promise)
 ], CoursesController.prototype, "getCourseDetails", null);
+__decorate([
+    (0, common_1.Get)('courseUnique/:courseId'),
+    __param(0, (0, common_1.Param)('courseId')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], CoursesController.prototype, "getUniqueCourse", null);
+__decorate([
+    (0, common_1.Get)('course-with-progress/:courseId'),
+    __param(0, (0, common_1.Param)('courseId')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], CoursesController.prototype, "getCourseDetailsWithProgress", null);
 __decorate([
     (0, common_1.Patch)(':courseId'),
     __param(0, (0, common_1.Param)('courseId')),
@@ -233,6 +348,59 @@ __decorate([
     __metadata("design:paramtypes", [String, Object, Object]),
     __metadata("design:returntype", Promise)
 ], CoursesController.prototype, "createChapter", null);
+__decorate([
+    (0, common_1.Patch)(':courseId/chapters/:chapterId'),
+    __param(0, (0, common_1.Param)('courseId')),
+    __param(1, (0, common_1.Param)('chapterId')),
+    __param(2, (0, common_1.Body)()),
+    __param(3, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, update_chapter_dto_1.UpdateChapterDto, Object]),
+    __metadata("design:returntype", Promise)
+], CoursesController.prototype, "updateChapter", null);
+__decorate([
+    (0, common_1.Patch)(':courseId/chapters/:chapterId/publish'),
+    __param(0, (0, common_1.Param)('courseId')),
+    __param(1, (0, common_1.Param)('chapterId')),
+    __param(2, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, Object]),
+    __metadata("design:returntype", Promise)
+], CoursesController.prototype, "publishChapter", null);
+__decorate([
+    (0, common_1.Patch)(':courseId/chapters/:chapterId/unpublish'),
+    __param(0, (0, common_1.Param)('courseId')),
+    __param(1, (0, common_1.Param)('chapterId')),
+    __param(2, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, Object]),
+    __metadata("design:returntype", Promise)
+], CoursesController.prototype, "unpublishChapter", null);
+__decorate([
+    (0, common_1.Patch)(':id/publish'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], CoursesController.prototype, "publishCourse", null);
+__decorate([
+    (0, common_1.Patch)(':id/unpublish'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], CoursesController.prototype, "unpublishCourse", null);
+__decorate([
+    (0, common_1.Put)(':id/chapters/reorder'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)('list')),
+    __param(2, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Array, Object]),
+    __metadata("design:returntype", Promise)
+], CoursesController.prototype, "reorderChapters", null);
 CoursesController = __decorate([
     (0, common_1.Controller)('courses'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),

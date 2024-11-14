@@ -5,58 +5,82 @@ import {
   Redirect,
   UseGuards,
   UnauthorizedException,
+  Patch,
+  Body,
+  Req,
+  ForbiddenException,
+  Query,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport'; // For auth guard
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ChaptersService } from './chapters.service';
+import { UpdateChapterDto } from './dto/update-chapter.dto';
 // import { PrismaService } from './prisma.service'; // Assuming you have a Prisma service to interact with DB
 // import { SessionService } from './session.service'; // Assuming you have a session management service
+import { Request } from 'express';
 
 @Controller('chapters')
+@UseGuards(AuthGuard('jwt'))
 export class ChapterController {
   constructor(
-    private readonly prisma: PrismaService, // For interacting with the database
-  ) // private readonly sessionService: SessionService, // For session management
-  {}
+    private readonly prisma: PrismaService,
+    private readonly chaptersService: ChaptersService, // private readonly sessionService: SessionService, // For session management // For interacting with the database
+  ) {}
 
-  @Get(':courseId/:chapterId')
-  @UseGuards(AuthGuard('jwt')) // JWT or your custom AuthGuard
+  @Get(':courseId/chapters/:chapterId')
   async getChapter(
     @Param('courseId') courseId: string,
     @Param('chapterId') chapterId: string,
   ) {
-    // Get user session (assuming you have a session service)
-    // const userSession = await this.sessionService.getSession(); // Session service to retrieve user session info
+    return this.chaptersService.getChapterWithCompletion(courseId, chapterId);
+  }
 
-    // if (!userSession?.userId) {
-    //   throw new UnauthorizedException('Unauthorized');
+  @Get('get-chapter')
+  async getChapterData(
+    @Query('courseId') courseId: string,
+    @Query('chapterId') chapterId: string,
+    @Req() req: Request,
+  ) {
+    // const session = await this.authService.getSession(); // Get session from AuthService
+
+    // if (!session || !session.user) {
+    //   throw new ForbiddenException('Unauthorized');
     // }
+    const userId = req.user['id']; // Extract userId from the request (assuming user is set in the request)
 
-    const chapter = await this.prisma.chapter.findUnique({
-      where: { id: chapterId },
-      include: { muxData: true },
-    });
-
-    if (!chapter || chapter.courseId !== courseId) {
-      // Redirect if chapter or course is not found
-      return { message: 'Chapter not found or unauthorized access' };
+    // const userId = session.user.id;
+    try {
+      return await this.chaptersService.getChapterData(
+        userId,
+        courseId,
+        chapterId,
+      );
+    } catch (error) {
+      throw error;
     }
+  }
 
-    // Checking for required fields completion
-    const requiredFields = [
-      chapter.title,
-      chapter.description,
-      chapter.videoUrl,
-    ];
-    const completedFields = requiredFields.filter(Boolean).length;
-    const totalFields = requiredFields.length;
-
-    const isComplete = completedFields === totalFields;
-    const completionText = `(${completedFields}/${totalFields})`;
-
-    return {
-      chapter,
-      isComplete,
-      completionText,
-    };
+  @Patch(':courseId/chapters/:chapterId')
+  async updateChapter(
+    @Param('courseId') courseId: string,
+    @Param('chapterId') chapterId: string,
+    @Body() updateChapterDto: UpdateChapterDto,
+    @Req() req: Request,
+  ) {
+    try {
+      console.log(req, 'reee');
+      // const userId = req.user?.id;
+      // if (!userId) {
+      //   throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+      // }
+      // const chapter = await this.chaptersService.updateChapter(
+      //   courseId,
+      //   chapterId,
+      //   updateChapterDto,
+      // );
+      // return { chapter, message: 'Chapter updated successfully' };
+    } catch (error) {
+      throw error;
+    }
   }
 }

@@ -14,6 +14,7 @@ import {
   UseInterceptors,
   Inject,
   UnauthorizedException,
+  Put,
 } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { Request } from 'express';
@@ -26,6 +27,7 @@ import { FileInterceptor } from '@nestjs/platform-express/multer';
 import { extname } from 'path';
 import * as fs from 'fs';
 import { ChaptersService } from './chapters/chapters.service';
+import { UpdateChapterDto } from './dto/update-chapter.dto';
 
 //   import { SessionGuard } from '../auth/session.guard'; // Custom guard for session handling
 //   import { CreateCourseDto } from './dto/create-course.dto';
@@ -134,6 +136,40 @@ export class CoursesController {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  @Get('courseUnique/:courseId')
+  async getUniqueCourse(
+    @Param('courseId') courseId: string,
+    @Req() req: Request,
+  ) {
+    const userId = req.user['id']; // Extract userId from the request (assuming user is set in the request)
+
+    const course = await this.coursesService.getCourseById(courseId, userId);
+
+    return { status: 'success', data: course };
+  }
+
+  @Get('course-with-progress/:courseId')
+  async getCourseDetailsWithProgress(
+    @Param('courseId') courseId: string,
+    @Req() req: Request,
+  ) {
+    const userId = req.user?.id; // Get userId from JWT token (assuming JWT is being used)
+
+    if (!userId) {
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    }
+
+    const course = await this.coursesService.getCourseWithProgress(
+      courseId,
+      userId,
+    );
+    if (!course) {
+      throw new HttpException('Course not found', HttpStatus.NOT_FOUND);
+    }
+
+    return course;
   }
 
   @Patch(':courseId')
@@ -281,5 +317,129 @@ export class CoursesController {
     });
 
     return chapter;
+  }
+
+  @Patch(':courseId/chapters/:chapterId')
+  async updateChapter(
+    @Param('courseId') courseId: string,
+    @Param('chapterId') chapterId: string,
+    @Body() updateChapterDto: UpdateChapterDto,
+    @Req() req: Request,
+  ) {
+    try {
+      // console.log(req, 'reee');
+      const userId = req.user?.id;
+      if (!userId) {
+        throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+      }
+      console.log(updateChapterDto, 'udddd');
+      const chapter = await this.chaptersService.updateChapter(
+        courseId,
+        chapterId,
+        updateChapterDto,
+        userId,
+      );
+      return { chapter, message: 'Chapter updated successfully' };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Patch(':courseId/chapters/:chapterId/publish')
+  async publishChapter(
+    @Param('courseId') courseId: string,
+    @Param('chapterId') chapterId: string,
+    @Req() req: Request,
+  ) {
+    console.log(req, 'ererer');
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    }
+    return this.coursesService.publishChapter(courseId, chapterId, userId);
+  }
+
+  @Patch(':courseId/chapters/:chapterId/unpublish')
+  async unpublishChapter(
+    @Param('courseId') courseId: string,
+    @Param('chapterId') chapterId: string,
+    @Req() req: Request,
+  ) {
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    }
+
+    try {
+      return await this.coursesService.unpublishChapter(
+        courseId,
+        chapterId,
+        userId,
+      );
+    } catch (error) {
+      console.error('[CHAPTER_UNPUBLISH]', error);
+      throw new HttpException(
+        'Internal Server Error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Patch(':id/publish')
+  async publishCourse(@Param('id') id: string, @Req() req: Request) {
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    }
+
+    try {
+      return await this.coursesService.publishCourse(id, userId);
+    } catch (error) {
+      console.error('[COURSE_ID_PUBLISH]', error);
+      throw new HttpException(
+        'Internal Server Error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+  @Patch(':id/unpublish')
+  async unpublishCourse(@Param('id') courseId: string, @Req() req: Request) {
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    }
+
+    try {
+      return await this.coursesService.unpublishCourse(courseId, userId);
+    } catch (error) {
+      console.error('[COURSE_ID_UNPUBLISH]', error);
+      throw new HttpException(
+        'Internal Server Error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Put(':id/chapters/reorder')
+  async reorderChapters(
+    @Param('id') courseId: string,
+    @Body('list') list: { id: string; position: number }[],
+    @Req() req: Request,
+  ) {
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    }
+
+    try {
+      await this.coursesService.reorderChapters(courseId, userId, list);
+      return { message: 'Chapters reordered successfully' };
+    } catch (error) {
+      console.error('[REORDER]', error);
+      throw new HttpException(
+        'Internal Server Error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

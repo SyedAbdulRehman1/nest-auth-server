@@ -5,36 +5,36 @@ export declare class CoursesService {
     constructor(prisma: PrismaService);
     getCoursesByUser(userId: string): Promise<{
         id: string;
-        userId: string;
+        createdAt: Date;
+        updatedAt: Date;
         title: string;
+        userId: string;
         description: string;
         imageUrl: string;
         price: number;
         isPublished: boolean;
         categoryId: string;
-        createdAt: Date;
-        updatedAt: Date;
     }[]>;
     createCourse(userId: string, createCourseDto: CreateCourseDto): Promise<{
         id: string;
-        userId: string;
+        createdAt: Date;
+        updatedAt: Date;
         title: string;
+        userId: string;
         description: string;
         imageUrl: string;
         price: number;
         isPublished: boolean;
         categoryId: string;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     getCourseByIdAndUser(courseId: string, userId: string): Promise<{
         chapters: {
             id: string;
+            createdAt: Date;
+            updatedAt: Date;
             title: string;
             description: string;
             isPublished: boolean;
-            createdAt: Date;
-            updatedAt: Date;
             position: number;
             videoUrl: string;
             isFree: boolean;
@@ -42,47 +42,162 @@ export declare class CoursesService {
         }[];
         attachments: {
             id: string;
+            name: string;
             createdAt: Date;
             updatedAt: Date;
-            name: string;
             courseId: string;
             url: string;
         }[];
     } & {
         id: string;
-        userId: string;
+        createdAt: Date;
+        updatedAt: Date;
         title: string;
+        userId: string;
         description: string;
         imageUrl: string;
         price: number;
         isPublished: boolean;
         categoryId: string;
+    }>;
+    getCourseById(courseId: string, userId: string): Promise<{
+        chapters: {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            title: string;
+            description: string;
+            isPublished: boolean;
+            position: number;
+            videoUrl: string;
+            isFree: boolean;
+            courseId: string;
+        }[];
+    } & {
+        id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
+        userId: string;
+        description: string;
+        imageUrl: string;
+        price: number;
+        isPublished: boolean;
+        categoryId: string;
     }>;
+    getCourseWithProgress(courseId: string, userId: string): Promise<{
+        course: {
+            chapters: ({
+                userProgress: {
+                    id: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    userId: string;
+                    chapterId: string;
+                    isCompleted: boolean;
+                }[];
+            } & {
+                id: string;
+                createdAt: Date;
+                updatedAt: Date;
+                title: string;
+                description: string;
+                isPublished: boolean;
+                position: number;
+                videoUrl: string;
+                isFree: boolean;
+                courseId: string;
+            })[];
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            title: string;
+            userId: string;
+            description: string;
+            imageUrl: string;
+            price: number;
+            isPublished: boolean;
+            categoryId: string;
+        };
+        progressCount: number;
+    }>;
+    getProgress(userId: string, courseId: string): Promise<number>;
     updateCourse(courseId: string, userId: string, updateData: any): Promise<{
         id: string;
-        userId: string;
+        createdAt: Date;
+        updatedAt: Date;
         title: string;
+        userId: string;
         description: string;
         imageUrl: string;
         price: number;
         isPublished: boolean;
         categoryId: string;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     updateCourseImage(courseId: string, userId: string, imageUrl: string): Promise<{
         id: string;
-        userId: string;
+        createdAt: Date;
+        updatedAt: Date;
         title: string;
+        userId: string;
         description: string;
         imageUrl: string;
         price: number;
         isPublished: boolean;
         categoryId: string;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     getCourseOwner(courseId: string, userId: string): Promise<boolean>;
+    publishChapter(courseId: string, chapterId: string, userId: string): Promise<{
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        title: string;
+        description: string;
+        isPublished: boolean;
+        position: number;
+        videoUrl: string;
+        isFree: boolean;
+        courseId: string;
+    }>;
+    unpublishChapter(courseId: string, chapterId: string, userId: string): Promise<{
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        title: string;
+        description: string;
+        isPublished: boolean;
+        position: number;
+        videoUrl: string;
+        isFree: boolean;
+        courseId: string;
+    }>;
+    publishCourse(courseId: string, userId: string): Promise<{
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        title: string;
+        userId: string;
+        description: string;
+        imageUrl: string;
+        price: number;
+        isPublished: boolean;
+        categoryId: string;
+    }>;
+    unpublishCourse(courseId: string, userId: string): Promise<{
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        title: string;
+        userId: string;
+        description: string;
+        imageUrl: string;
+        price: number;
+        isPublished: boolean;
+        categoryId: string;
+    }>;
+    reorderChapters(courseId: string, userId: string, list: {
+        id: string;
+        position: number;
+    }[]): Promise<void>;
 }
