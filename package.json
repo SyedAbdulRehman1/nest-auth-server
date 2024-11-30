@@ -9,6 +9,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
+    "postinstall": "prisma generate",
     "start:prod": "node dist/main",
     "vercel-build": "npm run build",
     "start:dev": "nest start --watch",
