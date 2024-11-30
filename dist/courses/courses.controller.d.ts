@@ -15,11 +15,11 @@ export declare class CoursesController {
             updatedAt: Date;
             title: string;
             userId: string;
-            description: string;
-            imageUrl: string;
-            price: number;
+            description: string | null;
+            imageUrl: string | null;
+            price: number | null;
             isPublished: boolean;
-            categoryId: string;
+            categoryId: string | null;
         }[];
     }>;
     createCourse(req: Request, createCourseDto: CreateCourseDto): Promise<{
@@ -28,11 +28,11 @@ export declare class CoursesController {
         updatedAt: Date;
         title: string;
         userId: string;
-        description: string;
-        imageUrl: string;
-        price: number;
+        description: string | null;
+        imageUrl: string | null;
+        price: number | null;
         isPublished: boolean;
-        categoryId: string;
+        categoryId: string | null;
     }>;
     getCourseDetails(courseId: string, userId: string, req: Request): Promise<{
         chapters: {
@@ -40,10 +40,10 @@ export declare class CoursesController {
             createdAt: Date;
             updatedAt: Date;
             title: string;
-            description: string;
+            description: string | null;
             isPublished: boolean;
             position: number;
-            videoUrl: string;
+            videoUrl: string | null;
             isFree: boolean;
             courseId: string;
         }[];
@@ -61,11 +61,11 @@ export declare class CoursesController {
         updatedAt: Date;
         title: string;
         userId: string;
-        description: string;
-        imageUrl: string;
-        price: number;
+        description: string | null;
+        imageUrl: string | null;
+        price: number | null;
         isPublished: boolean;
-        categoryId: string;
+        categoryId: string | null;
     }>;
     getUniqueCourse(courseId: string, req: Request): Promise<{
         status: string;
@@ -75,10 +75,10 @@ export declare class CoursesController {
                 createdAt: Date;
                 updatedAt: Date;
                 title: string;
-                description: string;
+                description: string | null;
                 isPublished: boolean;
                 position: number;
-                videoUrl: string;
+                videoUrl: string | null;
                 isFree: boolean;
                 courseId: string;
             }[];
@@ -88,11 +88,11 @@ export declare class CoursesController {
             updatedAt: Date;
             title: string;
             userId: string;
-            description: string;
-            imageUrl: string;
-            price: number;
+            description: string | null;
+            imageUrl: string | null;
+            price: number | null;
             isPublished: boolean;
-            categoryId: string;
+            categoryId: string | null;
         };
     }>;
     getCourseDetailsWithProgress(courseId: string, req: Request): Promise<{
@@ -103,18 +103,18 @@ export declare class CoursesController {
                     createdAt: Date;
                     updatedAt: Date;
                     userId: string;
-                    chapterId: string;
                     isCompleted: boolean;
+                    chapterId: string;
                 }[];
             } & {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
                 title: string;
-                description: string;
+                description: string | null;
                 isPublished: boolean;
                 position: number;
-                videoUrl: string;
+                videoUrl: string | null;
                 isFree: boolean;
                 courseId: string;
             })[];
@@ -124,11 +124,11 @@ export declare class CoursesController {
             updatedAt: Date;
             title: string;
             userId: string;
-            description: string;
-            imageUrl: string;
-            price: number;
+            description: string | null;
+            imageUrl: string | null;
+            price: number | null;
             isPublished: boolean;
-            categoryId: string;
+            categoryId: string | null;
         };
         progressCount: number;
     }>;
@@ -138,11 +138,11 @@ export declare class CoursesController {
         updatedAt: Date;
         title: string;
         userId: string;
-        description: string;
-        imageUrl: string;
-        price: number;
+        description: string | null;
+        imageUrl: string | null;
+        price: number | null;
         isPublished: boolean;
-        categoryId: string;
+        categoryId: string | null;
     }>;
     uploadFile(courseId: string, file: Express.Multer.File, req: Request): Promise<{
         url: string;
@@ -152,11 +152,11 @@ export declare class CoursesController {
             updatedAt: Date;
             title: string;
             userId: string;
-            description: string;
-            imageUrl: string;
-            price: number;
+            description: string | null;
+            imageUrl: string | null;
+            price: number | null;
             isPublished: boolean;
-            categoryId: string;
+            categoryId: string | null;
         };
     }>;
     createChapter(courseId: string, body: {
@@ -166,10 +166,10 @@ export declare class CoursesController {
         createdAt: Date;
         updatedAt: Date;
         title: string;
-        description: string;
+        description: string | null;
         isPublished: boolean;
         position: number;
-        videoUrl: string;
+        videoUrl: string | null;
         isFree: boolean;
         courseId: string;
     }>;
@@ -179,10 +179,10 @@ export declare class CoursesController {
             createdAt: Date;
             updatedAt: Date;
             title: string;
-            description: string;
+            description: string | null;
             isPublished: boolean;
             position: number;
-            videoUrl: string;
+            videoUrl: string | null;
             isFree: boolean;
             courseId: string;
         };
@@ -193,10 +193,10 @@ export declare class CoursesController {
         createdAt: Date;
         updatedAt: Date;
         title: string;
-        description: string;
+        description: string | null;
         isPublished: boolean;
         position: number;
-        videoUrl: string;
+        videoUrl: string | null;
         isFree: boolean;
         courseId: string;
     }>;
@@ -205,10 +205,10 @@ export declare class CoursesController {
         createdAt: Date;
         updatedAt: Date;
         title: string;
-        description: string;
+        description: string | null;
         isPublished: boolean;
         position: number;
-        videoUrl: string;
+        videoUrl: string | null;
         isFree: boolean;
         courseId: string;
     }>;
@@ -218,11 +218,11 @@ export declare class CoursesController {
         updatedAt: Date;
         title: string;
         userId: string;
-        description: string;
-        imageUrl: string;
-        price: number;
+        description: string | null;
+        imageUrl: string | null;
+        price: number | null;
         isPublished: boolean;
-        categoryId: string;
+        categoryId: string | null;
     }>;
     unpublishCourse(courseId: string, req: Request): Promise<{
         id: string;
@@ -230,11 +230,11 @@ export declare class CoursesController {
         updatedAt: Date;
         title: string;
         userId: string;
-        description: string;
-        imageUrl: string;
-        price: number;
+        description: string | null;
+        imageUrl: string | null;
+        price: number | null;
         isPublished: boolean;
-        categoryId: string;
+        categoryId: string | null;
     }>;
     reorderChapters(courseId: string, list: {
         id: string;

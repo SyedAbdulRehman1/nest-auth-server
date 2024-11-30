@@ -21,9 +21,9 @@ let PurchasesController = class PurchasesController {
         this.purchasesService = purchasesService;
     }
     async checkPurchase(courseId, req) {
-        var _a;
         console.log(req.user, 'dfdf');
-        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        const user = req.user;
+        const userId = user.id;
         if (!userId) {
             throw new common_1.HttpException('Unauthorized', common_1.HttpStatus.UNAUTHORIZED);
         }

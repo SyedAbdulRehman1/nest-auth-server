@@ -9,11 +9,11 @@ export declare class CategoryController {
             name: string;
         }[];
         courses: {
-            progress: number;
+            progress: number | null;
             category: {
                 id: string;
                 name: string;
-            };
+            } | null;
             chapters: {
                 id: string;
             }[];
@@ -29,11 +29,11 @@ export declare class CategoryController {
             updatedAt: Date;
             title: string;
             userId: string;
-            description: string;
-            imageUrl: string;
-            price: number;
+            description: string | null;
+            imageUrl: string | null;
+            price: number | null;
             isPublished: boolean;
-            categoryId: string;
+            categoryId: string | null;
         }[];
     }>;
 }

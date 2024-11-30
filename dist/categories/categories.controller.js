@@ -21,8 +21,8 @@ let CategoryController = class CategoryController {
         this.CategoryService = CategoryService;
     }
     async getCategoriesAndCourses(req, title, categoryId) {
-        var _a;
-        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        const user = req.user;
+        const userId = user.id;
         if (!userId) {
             throw new common_1.HttpException('Unauthorized', common_1.HttpStatus.UNAUTHORIZED);
         }

@@ -27,7 +27,8 @@ let ChapterController = class ChapterController {
         return this.chaptersService.getChapterWithCompletion(courseId, chapterId);
     }
     async getChapterData(courseId, chapterId, req) {
-        const userId = req.user['id'];
+        const user = req.user;
+        const userId = user.id;
         try {
             return await this.chaptersService.getChapterData(userId, courseId, chapterId);
         }

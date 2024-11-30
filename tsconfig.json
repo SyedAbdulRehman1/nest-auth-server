@@ -1,3 +1,25 @@
+// {
+//   "compilerOptions": {
+//     "module": "commonjs",
+//     "declaration": true,
+//     "removeComments": true,
+//     "emitDecoratorMetadata": true,
+//     "experimentalDecorators": true,
+//     "allowSyntheticDefaultImports": true,
+//     "target": "es2017",
+//     "sourceMap": true,
+//     "outDir": "./dist",
+//     "baseUrl": "./",
+//     "incremental": true,
+//     "skipLibCheck": true,
+//     "strictNullChecks": false,
+//     "noImplicitAny": false,
+//     "strictBindCallApply": false,
+//     "forceConsistentCasingInFileNames": false,
+//     "noFallthroughCasesInSwitch": false,
+//     "typeRoots": ["node_modules/@types", "src/types"]
+//   }
+// }
 {
   "compilerOptions": {
     "module": "commonjs",
@@ -5,18 +27,22 @@
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "target": "es2017",
+    "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "typeRoots": ["node_modules/@types", "src/types"]
-  }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "test"]
 }

@@ -15,10 +15,10 @@ export declare class ChaptersService {
         createdAt: Date;
         updatedAt: Date;
         title: string;
-        description: string;
+        description: string | null;
         isPublished: boolean;
         position: number;
-        videoUrl: string;
+        videoUrl: string | null;
         isFree: boolean;
         courseId: string;
     }>;
@@ -26,19 +26,19 @@ export declare class ChaptersService {
         chapter: {
             muxData: {
                 id: string;
-                chapterId: string;
                 assetId: string;
-                playbackId: string;
-            };
+                playbackId: string | null;
+                chapterId: string;
+            } | null;
         } & {
             id: string;
             createdAt: Date;
             updatedAt: Date;
             title: string;
-            description: string;
+            description: string | null;
             isPublished: boolean;
             position: number;
-            videoUrl: string;
+            videoUrl: string | null;
             isFree: boolean;
             courseId: string;
         };
@@ -50,10 +50,10 @@ export declare class ChaptersService {
         createdAt: Date;
         updatedAt: Date;
         title: string;
-        description: string;
+        description: string | null;
         isPublished: boolean;
         position: number;
-        videoUrl: string;
+        videoUrl: string | null;
         isFree: boolean;
         courseId: string;
     }>;
@@ -63,34 +63,50 @@ export declare class ChaptersService {
             createdAt: Date;
             updatedAt: Date;
             title: string;
-            description: string;
+            description: string | null;
             isPublished: boolean;
             position: number;
-            videoUrl: string;
+            videoUrl: string | null;
             isFree: boolean;
             courseId: string;
         };
         course: {
-            price: number;
+            price: number | null;
         };
-        muxData: any;
-        attachments: any[];
-        nextChapter: any;
+        muxData: {
+            id: string;
+            assetId: string;
+            playbackId: string | null;
+            chapterId: string;
+        } | null;
+        attachments: any;
+        nextChapter: {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            title: string;
+            description: string | null;
+            isPublished: boolean;
+            position: number;
+            videoUrl: string | null;
+            isFree: boolean;
+            courseId: string;
+        } | null;
         userProgress: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
             userId: string;
-            chapterId: string;
             isCompleted: boolean;
-        };
+            chapterId: string;
+        } | null;
         purchase: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
             userId: string;
             courseId: string;
-        };
+        } | null;
     }>;
     private getSessionFromRequest;
 }
