@@ -26,9 +26,9 @@ export declare class ChaptersService {
         chapter: {
             muxData: {
                 id: string;
+                chapterId: string;
                 assetId: string;
                 playbackId: string;
-                chapterId: string;
             };
         } & {
             id: string;

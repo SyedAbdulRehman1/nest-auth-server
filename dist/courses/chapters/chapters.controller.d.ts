@@ -10,9 +10,9 @@ export declare class ChapterController {
         chapter: {
             muxData: {
                 id: string;
+                chapterId: string;
                 assetId: string;
                 playbackId: string;
-                chapterId: string;
             };
         } & {
             id: string;
