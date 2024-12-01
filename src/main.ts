@@ -30,7 +30,7 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 console.log(process.env.FRONT_END_URL,"FRONT_END_URL");
     app.enableCors({
-      origin: "http://localhost:3000/", // Adjust this if your frontend is hosted elsewhere
+      origin: "http://localhost:3000", // Adjust this if your frontend is hosted elsewhere
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
       credentials: true,
     });
